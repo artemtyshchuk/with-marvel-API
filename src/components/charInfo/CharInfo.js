@@ -1,10 +1,8 @@
 import {useState, useEffect} from 'react';
 
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Skeleton from  '../skeleton/Skeleton'
 import useMarvelService from '../../services/MarvelService'; 
 import PropTypes from 'prop-types'
+import setContent from '../../utils/setConted';
 
 import './charInfo.scss';
 
@@ -19,7 +17,7 @@ const CharInfo = (props) => {
     // }
     const [char, setChar] = useState(null);
 
-    const {loading, error, getCharacter, clearError} = useMarvelService();
+    const {getCharacter, clearError, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -33,7 +31,8 @@ const CharInfo = (props) => {
         }
         clearError();
         getCharacter(charId)
-            .then(onCharLoaded);
+            .then(onCharLoaded) 
+            .then(() => setProcess('confirmed')); //FSM
 
     }
 
@@ -41,23 +40,26 @@ const CharInfo = (props) => {
         setChar(char);
     }
 
-    const skeleton = char || loading || error ? null : <Skeleton/>;
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !char) ? <View char={char}/> : null;
+ 
 
-    return (
+    // const skeleton = char || loading || error ? null : <Skeleton/>;
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading ? <Spinner/> : null;
+    // const content = !(loading || error || !char) ? <View char={char}/> : null;
+
+    return (                                                    //FSM
         <div className="char__info">
-            {skeleton}
+            {/* {skeleton}
             {errorMessage}
             {spinner}
-            {content}
+            {content} */}
+            {setContent(process, View, char)} 
         </div>
     )
 }
 
-const View = ({char}) => {
-    const {name, description, thumbnail, homepage, wiki, comics} = char;
+const View = ({data}) => {
+    const {name, description, thumbnail, homepage, wiki, comics} = data;
 
     let imgStyle = {'objectFit' : 'cover'};
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {

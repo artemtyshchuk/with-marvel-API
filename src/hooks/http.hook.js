@@ -1,13 +1,12 @@
 import { useState, useCallback } from "react";
 
 export const useHttp = () => {
-    const [loading, setLoading] = useState(false); // состояние необходимо будет менять, это будет происходить во время запросов когда загрузка будет тру
-    const [error, setError] = useState(null);  // А также когда будет появляться ошибка, когда запрос закончился ошибкой
-        // запрос  Сюда помещаем функцию которая будет делать запросы
+
+    const [process, setProcess] = useState('waiting'); //FSM
                                     //
     const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'aplication/json'}) => {
                     // используем useCallback Патамушта предполагаем что эту конструкцию будем позже использовать внутри нашего приложения
-        setLoading(true);
+        setProcess('loading'); //FSM
 
         try {
             const response = await fetch(url, {method, body, headers});
@@ -18,17 +17,17 @@ export const useHttp = () => {
 
             const data = await response.json();
 
-            setLoading(false);
             return data;
         } catch(e) {
-            setLoading(false);
-            setError(e.message);
+            setProcess('error') //FSM
             throw e;
         }
 
     }, []);
 
-    const clearError = useCallback(() => setError(null), []);
+    const clearError = useCallback(() => {
+        setProcess('loading'); //FSM
+    }, []);
 
-    return {loading, request, error, clearError};
+    return {request, clearError, process, setProcess};
 }
