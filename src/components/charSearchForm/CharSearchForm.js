@@ -11,18 +11,18 @@ import './charSearchForm.scss';
 
 const CharSearchForm = () => {
 
-    const [char, setChar] = useState(null); //сюда ю=будет помезатся персонаж найденный в нашей api 
-    const {getCharacterByName, clearError, process, setProcess} = useMarvelService(); //иморт из сервиса
+    const [char, setChar] = useState(null);
+    const {getCharacterByName, clearError, process, setProcess} = useMarvelService();
 
-    const onCharLoaded = (char) => { // устанавливает состояние 
+    const onCharLoaded = (char) => {
         setChar(char)
     }
 
-    const updateChar = (name) => { // запускается в мементе когда идет запрос на сервер 
-        clearError();   //чистим все ошибки
+    const updateChar = (name) => {
+        clearError(); 
 
-        getCharacterByName(name) //делаем запрос на сервер
-            .then(onCharLoaded) // получаем данные
+        getCharacterByName(name)
+            .then(onCharLoaded)
             .then(() => setProcess('confirmed')); //FSM
 
     }
@@ -42,16 +42,15 @@ const CharSearchForm = () => {
     return (
         <div className="char__search-form">
             <Formik
-                initialValues = {{ //базовое значение
+                initialValues = {{
                     charName: ''
                 }}
-                validationSchema = {Yup.object({ // валидация
-                    charName: Yup.string().required('This field is required') // поле должно быть строкой и должно присутсвовать 
+                validationSchema = {Yup.object({
+                    charName: Yup.string().required('This field is required')
                 })}
-                onSubmit = { ({charName}) => { //выполняем updateChar, когда форма будет отправлятся  
+                onSubmit = { ({charName}) => {
                     updateChar(charName);
                 }}>
-                <>
                 <Form>
                     <label className="char__search-label" htmlFor="charName">Or find a character by name:</label>
                     <div className="char__search-wrapper">
@@ -69,7 +68,6 @@ const CharSearchForm = () => {
                     </div>
                     <FormikErrorMessage component="div" className="char__search-error" name="charName" />
                 </Form>
-                </>
             </Formik>
             {results}
             {errorMessage}

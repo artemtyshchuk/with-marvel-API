@@ -3,9 +3,7 @@ import { useState, useCallback } from "react";
 export const useHttp = () => {
 
     const [process, setProcess] = useState('waiting'); //FSM
-                                    //
     const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'aplication/json'}) => {
-                    // используем useCallback потому что предполагаем что эту конструкцию будем позже использовать внутри нашего приложения
         setProcess('loading'); //FSM
 
         try {

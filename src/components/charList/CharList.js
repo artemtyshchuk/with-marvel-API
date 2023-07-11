@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef, useMemo} from 'react';
 import PropTypes from 'prop-types';
 
-// import { motion } from "framer-motion"
 import {motion} from "framer-motion/dist/framer-motion";
 
 import Spinner from '../spinner/Spinner';
@@ -67,14 +66,6 @@ const CharList = (props) => {
         if (newCharList.length < 9) {
             ended = true;
         }
-
-        // this.setState(({offset, charList}) => ({
-        //     charList: [...charList, ...newCharList],
-        //     loading: false,
-        //     newItemLoading: false,
-        //     offset: offset + 9,
-        //     charEnded: ended
-        // }))
         setCharList(charList => [...charList, ...newCharList]);
         setNewItemLoading(newItemLoading => false);
         setOffset(offset => offset + 9);
@@ -84,13 +75,6 @@ const CharList = (props) => {
     const itemRefs = useRef([]);
 
     const focusOnItem = (id) => {
-        // Я реализовал вариант чуть сложнее, и с классом и с фокусом
-        // Но в теории можно оставить только фокус, и его в стилях использовать вместо класса
-        // На самом деле, решение с css-классом можно сделать, вынеся персонажа
-        // в отдельный компонент. Но кода будет больше, появится новое состояние
-        // и не факт, что мы выиграем по оптимизации за счет бОльшего кол-ва элементов
-
-        // По возможности, не злоупотребляйте рефами, только в крайних случаях
         itemRefs.current.forEach(item => item.classList.remove('char__item_selected'));
         itemRefs.current[id].classList.add('char__item_selected');
         itemRefs.current[id].focus();
@@ -105,18 +89,6 @@ const CharList = (props) => {
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
             }
-        
-            // return (                     //решение через onFocus и tabIndex={0}
-            //     <li 
-            //         tabIndex={0}
-            //         className="char__item"
-            //         key={item.id}
-            //         onFocus={() => this.props.onCharSelected(item.id)}>
-            //             <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-            //             <div className="char__name">{item.name}</div>
-            //     </li>
-            // )
-
             return (
                 <motion.li 
                     className="char__item"
@@ -143,8 +115,6 @@ const CharList = (props) => {
             )
         });
 
-
-        // А эта конструкция вынесена для центровки спиннера/ошибки
         return (
             <ul className="char__grid">
                 {items}
