@@ -50,8 +50,8 @@ const CharSearchForm = () => {
                 })}
                 onSubmit = { ({charName}) => { //выполняем updateChar, когда форма будет отправлятся  
                     updateChar(charName);
-                }}
-            >
+                }}>
+                <>
                 <Form>
                     <label className="char__search-label" htmlFor="charName">Or find a character by name:</label>
                     <div className="char__search-wrapper">
@@ -69,6 +69,7 @@ const CharSearchForm = () => {
                     </div>
                     <FormikErrorMessage component="div" className="char__search-error" name="charName" />
                 </Form>
+                </>
             </Formik>
             {results}
             {errorMessage}
